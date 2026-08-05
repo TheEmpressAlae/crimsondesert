@@ -1,0 +1,25 @@
+# Visual Studio and MSBuild outputs
+.vs/
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
+**/Win32/
+*.dll
+*.asi
+*.exe
+*.obj
+*.pdb
+*.idb
+*.iobj
+*.ipdb
+*.ilk
+*.log
+*.tlog
+*.recipe
+*.user
+
+# Release packaging is produced outside the source tree.
+dist/
+package/
+*.zip

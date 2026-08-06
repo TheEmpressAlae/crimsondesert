@@ -32,6 +32,8 @@ public:
 
 private:
     bool ready_{false};
+    bool protectionReady_{false};
+    std::uint64_t protectionDeadline_{0};
 };
 
 }  // namespace marker_teleport

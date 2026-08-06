@@ -4,23 +4,23 @@ Clean-room, teleport-only ASI project for Crimson Desert. The intended behavior 
 
 ## Current status
 
-Version 1.0.0 is a fail-closed implementation milestone, not a playable release. Configuration, lifecycle, input polling, debounce, logging, and the game-bridge boundary are implemented. The bridge intentionally refuses to arm until the current game build's player, marker, and protection signatures are independently verified.
+Version 1.0.0 is a playable current-build candidate. The isolated bridge resolves and guards the current player, destination marker, world origin, and temporary-protection interfaces. It refuses to arm when the expected signature counts or agreement checks fail.
 
-Target under investigation: Crimson Desert 1.16.0 (August 2026).
+The exact packaged test-5 binary passed DMM 1.5.8 GUI ingestion and uncontaminated runtime attribution on Crimson Desert BuildID `24568997` (`1.0.0.2289`) with Ultimate ASI Loader 9.7.2. Open-marker and targeted-marker teleports were visually confirmed. Absent/stale-marker behavior and clean shutdown remain final release-gate checks, so the follow-up PR remains a draft.
 
 ## Build
 
-Open `MarkerTeleportASI.slnx` with Visual Studio and build `Release|x64`, or invoke MSBuild against `MarkerTeleportASI\MarkerTeleportASI.vcxproj`. Rename the resulting DLL to `MarkerTeleportASI.asi` for Ultimate ASI Loader.
+Open `MarkerTeleportASI.slnx` with Visual Studio and build `Release|x64`, or invoke MSBuild against `MarkerTeleportASI\MarkerTeleportASI.vcxproj`. Rename the resulting DLL to `MarkerTeleport.asi` for Ultimate ASI Loader.
 
-The fail-closed scaffold has been compiled successfully with Visual Studio Build Tools 2022 (`v143`) as `Release|x64`. See `docs/BUILD_STATUS.md`. The resulting developer ASI is not yet a functional teleport release because its current-build game bridge remains intentionally unresolved.
+The current bridge builds with Visual Studio Build Tools 2022 (`v143`) as `Release|x64`, uses the static C++ runtime, and has only Windows system DLL dependencies. See `docs/BUILD_STATUS.md`.
 
 ## Runtime files
 
-- `MarkerTeleportASI.asi`
-- `MarkerTeleportASI.ini`
-- optional diagnostic `MarkerTeleportASI.log`
+- `MarkerTeleport.asi`
+- `MarkerTeleport.ini`
+- optional diagnostic `MarkerTeleport.log`
 
-Place them beside `CrimsonDesert.exe` in `bin64` after runtime validation is complete.
+For DMM 1.5.8, import the adjacent same-stem ASI/INI pair through the DMM GUI. The release ZIP keeps both files at its root and does not bundle an ASI loader.
 
 ## Clean-room boundary
 

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstdio>
+#include <share.h>
 #include <cwchar>
 #include <string>
 
@@ -14,6 +15,7 @@ namespace {
 
 using marker_teleport::GameBridge;
 using marker_teleport::TeleportRequest;
+using marker_teleport::TeleportResult;
 
 constexpr DWORD kPollMilliseconds = 25;
 constexpr DWORD kDebounceMilliseconds = 250;
@@ -46,6 +48,18 @@ void Log(const char* text) {
     }
 }
 
+void LogTeleportResult(TeleportResult result) {
+    switch (result) {
+    case TeleportResult::Success: Log("Teleport result: success\n"); break;
+    case TeleportResult::NotReady: Log("Teleport result: not ready\n"); break;
+    case TeleportResult::NoPlayer: Log("Teleport result: no player\n"); break;
+    case TeleportResult::NoMarker: Log("Teleport result: no marker\n"); break;
+    case TeleportResult::UnsafeContext: Log("Teleport result: unsafe context\n"); break;
+    case TeleportResult::InvalidCoordinates: Log("Teleport result: invalid coordinates\n"); break;
+    case TeleportResult::WriteFailed: Log("Teleport result: position write failed\n"); break;
+    }
+}
+
 int ParseFunctionKey(const wchar_t* value, int fallback) {
     if (value == nullptr || (value[0] != L'F' && value[0] != L'f')) {
         return fallback;
@@ -59,7 +73,7 @@ int ParseFunctionKey(const wchar_t* value, int fallback) {
 }
 
 void LoadConfig() {
-    const std::wstring path = PathFor(L"MarkerTeleportASI.ini");
+    const std::wstring path = PathFor(L"MarkerTeleport.ini");
     g_config.enabled = GetPrivateProfileIntW(L"General", L"Enabled", 1, path.c_str()) != 0;
     g_config.logEnabled = GetPrivateProfileIntW(L"General", L"LogEnabled", 1, path.c_str()) != 0;
 
@@ -95,12 +109,15 @@ DWORD WINAPI Worker(void*) {
     LoadConfig();
 
     if (g_config.logEnabled) {
-        _wfopen_s(&g_log, PathFor(L"MarkerTeleportASI.log").c_str(), L"w");
+        g_log = _wfsopen(PathFor(L"MarkerTeleport.log").c_str(), L"w",
+                         _SH_DENYNO);
     }
-    Log("MarkerTeleportASI v1.0.0 clean-room scaffold starting\n");
+    Log("MarkerTeleport v1.0.0 clean-room build starting\n");
 
     if (!g_game.Initialize()) {
         Log("FAIL-CLOSED: current-build game interfaces are unresolved; teleport is disabled\n");
+    } else {
+        Log("READY: current-build interfaces resolved; teleport input is active\n");
     }
 
     bool teleportWasDown = false;
@@ -122,7 +139,7 @@ DWORD WINAPI Worker(void*) {
                 g_config.fallbackHeight,
                 g_config.invulnerabilitySeconds * 1000U,
             };
-            (void)g_game.TeleportToMarker(request);
+            LogTeleportResult(g_game.TeleportToMarker(request));
         } else if (!g_config.enabled || !g_game.Ready()) {
             teleportWasDown = (GetAsyncKeyState(g_config.teleportKey) & 0x8000) != 0;
         }

@@ -21,7 +21,7 @@ The v1.1.0 production build completed with zero errors and zero warnings. It emb
 - Dynamic result: DMM ingestion and in-game NUMPAD9 input/teleport passed by user confirmation
 - Static parser coverage: alphanumeric, function, numpad, navigation, modifier, OEM punctuation, media, mouse, named `VK_` prefix, raw `VK:0xNN`/`VK_0xNN`, and invalid fallback
 
-The exact production ASI was exercised in game with the shipped F10 binding. The log recorded `READY` and two `Teleport result: success` entries. A map-object destination landed correctly; an open-map marker sent the player to an excessive altitude. The latter is an unresolved destination-height defect, and it also demonstrates that the current success result confirms the teleport write rather than validating the final landing position. Earlier candidate testing separately established NUMPAD9 input. No claim is made that every documented key was individually tested in game.
+The exact production ASI was exercised in game with the shipped F10 binding. The log recorded `READY` and two `Teleport result: success` entries. A map-object destination landed correctly, and an open-map marker used the intended high-altitude insertion. Earlier candidate testing separately established NUMPAD9 input. No claim is made that every documented key was individually tested in game.
 
 ## v1.0.0 runtime verification
 

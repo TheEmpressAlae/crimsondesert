@@ -6,9 +6,7 @@ Clean-room, teleport-only ASI project for Crimson Desert. The intended behavior 
 
 Version 1.1.0 is a playable current-build release candidate. The isolated bridge resolves and guards the current player, destination marker, world origin, and temporary-protection interfaces. It refuses to arm when the expected signature counts or agreement checks fail.
 
-The v1.0.0 bridge passed DMM 1.5.8 GUI ingestion and uncontaminated runtime attribution on Crimson Desert BuildID `24568997` (`1.0.0.2289`) with Ultimate ASI Loader 9.7.2. The exact v1.1.0 production ASI and F10 configuration were subsequently verified through DMM and in game: teleporting to a map object landed correctly, while teleporting to an open-map marker exposed an unresolved excessive-altitude defect. See `docs/BUILD_STATUS.md` for exact hashes and evidence boundaries.
-
-Known issue: an open-map marker can resolve to an unsafe high-altitude destination even though the bridge reports `Teleport result: success`. Map-object destinations have landed correctly in the confirmed v1.1.0 test.
+The v1.0.0 bridge passed DMM 1.5.8 GUI ingestion and uncontaminated runtime attribution on Crimson Desert BuildID `24568997` (`1.0.0.2289`) with Ultimate ASI Loader 9.7.2. The exact v1.1.0 production ASI and F10 configuration were subsequently verified through DMM and in game: teleporting to a map object landed correctly, and an open-map marker used the intended high-altitude insertion. See `docs/BUILD_STATUS.md` for exact hashes and evidence boundaries.
 
 ## Build
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 — 2026-08-11
+
+- Added case-insensitive standard keyboard, mouse, navigation, modifier, numpad, browser, media, and application-launch hotkey names while preserving field-specific fallbacks.
+- Added advanced `VK:0xNN` and `VK_0xNN` forms for Windows virtual-key values from `0x01` through `0xFE`.
+- Kept `F10` as the shipped teleport default and `F11` as the configuration-reload default.
+
 ## 1.0.0 — 2026-08-05
 
 - Established the clean-room MarkerTeleport project.

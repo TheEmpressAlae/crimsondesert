@@ -11,7 +11,7 @@
 - Production INI SHA-256: `1DF8C4CE69195837C9BD483BA96280688BE4A88B31E5D839EC5EE09BF47F971B`
 - Production DMM ZIP SHA-256: `FEF4FBD5D53BFC7CF7D24328088619138A49FD0F293C131C14A0F05B27EB3DFB`
 
-The v1.1.0 production build completed with zero errors and zero warnings. It embeds the `MarkerTeleport v1.1.0` startup identity, retains only Windows system DLL dependencies, and ships `Hotkey=F10` with `ReloadKey=F11`.
+The v1.1.0 production build completed with zero errors and zero warnings. It embeds the `MarkerTeleport v1.1.0` startup identity, retains only Windows system DLL dependencies, and ships `Hotkey=F10` with `ReloadKey=F11`. The exact production ASI and INI hashes listed above were confirmed in the active game installation.
 
 ## v1.1.0 keybinding verification
 
@@ -21,7 +21,7 @@ The v1.1.0 production build completed with zero errors and zero warnings. It emb
 - Dynamic result: DMM ingestion and in-game NUMPAD9 input/teleport passed by user confirmation
 - Static parser coverage: alphanumeric, function, numpad, navigation, modifier, OEM punctuation, media, mouse, named `VK_` prefix, raw `VK:0xNN`/`VK_0xNN`, and invalid fallback
 
-The production ASI is a version-identification-only rebuild of the tested keybinding implementation. Its exact hash was build- and static-verified but was not separately exercised in game. Dynamic testing establishes NUMPAD9 and the common teleport path; it does not claim that every documented key was individually tested in game.
+The exact production ASI was exercised in game with the shipped F10 binding. The log recorded `READY` and two `Teleport result: success` entries. A map-object destination landed correctly; an open-map marker sent the player to an excessive altitude. The latter is an unresolved destination-height defect, and it also demonstrates that the current success result confirms the teleport write rather than validating the final landing position. Earlier candidate testing separately established NUMPAD9 input. No claim is made that every documented key was individually tested in game.
 
 ## v1.0.0 runtime verification
 

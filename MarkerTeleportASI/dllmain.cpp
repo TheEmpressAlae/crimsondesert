@@ -10,12 +10,14 @@
 #include <string>
 
 #include "game_bridge.h"
+#include "key_config.h"
 
 namespace {
 
 using marker_teleport::GameBridge;
 using marker_teleport::TeleportRequest;
 using marker_teleport::TeleportResult;
+using marker_teleport::key_config::ParseVirtualKey;
 
 constexpr DWORD kPollMilliseconds = 25;
 constexpr DWORD kDebounceMilliseconds = 250;
@@ -60,18 +62,6 @@ void LogTeleportResult(TeleportResult result) {
     }
 }
 
-int ParseFunctionKey(const wchar_t* value, int fallback) {
-    if (value == nullptr || (value[0] != L'F' && value[0] != L'f')) {
-        return fallback;
-    }
-    wchar_t* end{};
-    const long number = std::wcstol(value + 1, &end, 10);
-    if (end == value + 1 || *end != L'\0' || number < 1 || number > 24) {
-        return fallback;
-    }
-    return VK_F1 + static_cast<int>(number - 1);
-}
-
 void LoadConfig() {
     const std::wstring path = PathFor(L"MarkerTeleport.ini");
     g_config.enabled = GetPrivateProfileIntW(L"General", L"Enabled", 1, path.c_str()) != 0;
@@ -79,9 +69,9 @@ void LoadConfig() {
 
     wchar_t value[64]{};
     GetPrivateProfileStringW(L"General", L"ReloadKey", L"F11", value, 64, path.c_str());
-    g_config.reloadKey = ParseFunctionKey(value, VK_F11);
+    g_config.reloadKey = ParseVirtualKey(value, VK_F11);
     GetPrivateProfileStringW(L"Teleport", L"Hotkey", L"F10", value, 64, path.c_str());
-    g_config.teleportKey = ParseFunctionKey(value, VK_F10);
+    g_config.teleportKey = ParseVirtualKey(value, VK_F10);
     GetPrivateProfileStringW(L"Teleport", L"FallbackHeight", L"1200", value, 64, path.c_str());
     g_config.fallbackHeight = std::clamp(std::wcstof(value, nullptr), -100000.0F, 100000.0F);
     const int invulnerabilitySeconds = static_cast<int>(
@@ -112,7 +102,7 @@ DWORD WINAPI Worker(void*) {
         g_log = _wfsopen(PathFor(L"MarkerTeleport.log").c_str(), L"w",
                          _SH_DENYNO);
     }
-    Log("MarkerTeleport v1.0.0 clean-room build starting\n");
+    Log("MarkerTeleport v1.1.0 clean-room build starting\n");
 
     if (!g_game.Initialize()) {
         Log("FAIL-CLOSED: current-build game interfaces are unresolved; teleport is disabled\n");

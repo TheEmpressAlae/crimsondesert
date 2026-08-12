@@ -188,7 +188,7 @@ $activeEvidence = @($activeFiles | Select-Object -Unique | ForEach-Object {
 $publishRoot = Get-NormalizedPath -Path (Split-Path -Parent $PSScriptRoot)
 $projectRoot = Get-NormalizedPath -Path (Split-Path -Parent (Split-Path -Parent $publishRoot))
 $automaticStagingRoots = @(
-    (Join-Path $publishRoot 'package-flat-v1.0.0-test2'),
+    (Join-Path $publishRoot 'package-v1.1.0'),
     (Join-Path $projectRoot 'marker-teleport-asi\package\DMM-installed-layout'),
     (Join-Path $env:LOCALAPPDATA 'com.definitive.modmanager'),
     (Join-Path $env:APPDATA 'com.definitive.modmanager'),
@@ -201,6 +201,8 @@ $stagingRoots = @($DmmStagingRoot + $automaticStagingRoots | Where-Object {
 } | Select-Object -Unique)
 
 $candidateNames = @(
+    'MarkerTeleport.asi',
+    'MarkerTeleport.ini',
     'MarkerTeleportASI.asi',
     'MarkerTeleportASI.ini',
     'OpenStorageAnywhere.asi',
@@ -230,6 +232,11 @@ $stagedPairs = @($stagedFiles | Group-Object { $_.Item.DirectoryName } | ForEach
     [pscustomobject][ordered]@{
         Directory = $directory
         DiscoveredUnder = @($group.Root | Select-Object -Unique)
+        MarkerTeleport = @($group | Where-Object {
+            $_.Item.Name -ilike 'MarkerTeleport.*'
+        } | ForEach-Object {
+            Get-FileEvidence -Path $_.Item.FullName
+        })
         MarkerTeleportASI = @($group | Where-Object {
             $_.Item.Name -ilike 'MarkerTeleportASI.*'
         } | ForEach-Object {
